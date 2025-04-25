@@ -5,8 +5,20 @@ import numpy as np
 import torch
 from .michelangelo.utils.misc import instantiate_from_config
 
+
+def load_model(ckpt_path="miche/shapevae-256.ckpt", config_path="miche/shapevae-256.yaml"):
+    model_config = OmegaConf.load(config_path)
+    # print(model_config)
+    if hasattr(model_config, "model"):
+        model_config = model_config.model
+
+    model = instantiate_from_config(model_config, ckpt_path=ckpt_path)
+    model = model.eval()
+
+    return model
+
+
 def load_surface(fp):
-    
     with np.load(fp) as input_pc:
         surface = input_pc['points']
         normal = input_pc['normals']
@@ -38,16 +50,7 @@ def reconstruction(args, model, bounds=(-1.25, -1.25, -1.25, 1.25, 1.25, 1.25), 
     
     return 0
 
-def load_model(ckpt_path="miche/shapevae-256.ckpt", config_path="miche/shapevae-256.yaml"):
-    model_config = OmegaConf.load(config_path)
-    # print(model_config)
-    if hasattr(model_config, "model"):
-        model_config = model_config.model
 
-    model = instantiate_from_config(model_config, ckpt_path=ckpt_path)
-    model = model.eval()
-
-    return model
 if __name__ == "__main__":
     '''
     1. Reconstruct point cloud
