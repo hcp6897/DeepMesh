@@ -21,7 +21,6 @@ def load_surface(fp):
     return surface
 
 def reconstruction(args, model, bounds=(-1.25, -1.25, -1.25, 1.25, 1.25, 1.25), octree_depth=7, num_chunks=10000):
-
     surface = load_surface(args.pointcloud_path)
     # old_surface = surface.clone()
 
